@@ -393,6 +393,15 @@
     opacity: 0.55;
   }
 
+  .comments-list .remove-comment-btn {
+    display: none;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    font-style: normal;
+  }
+  body.organizer-mode .comments-list .remove-comment-btn { display: block; }
+
   .scale {
     position: relative;
     display: flex;
@@ -1251,7 +1260,12 @@
     commentsList.innerHTML = list
       .slice()
       .reverse()
-      .map((c) => `<li>${escapeHtml(c.text)}</li>`)
+      .map((c) => `
+        <li data-id="${c.id}">
+          ${escapeHtml(c.text)}
+          <button type="button" class="row-btn remove-comment-btn" data-id="${c.id}" title="Remove this comment" aria-label="Remove this comment">&times;</button>
+        </li>
+      `)
       .join("");
   }
 
@@ -1374,6 +1388,24 @@
         saveBtn.disabled = false;
       }
       return;
+    }
+  });
+
+  commentsList.addEventListener("click", async (e) => {
+    const removeBtn = e.target.closest(".remove-comment-btn");
+    if (!removeBtn) return;
+
+    const id = removeBtn.dataset.id;
+    removeBtn.disabled = true;
+    try {
+      const latest = await fetchState();
+      const comments = latest.comments.filter((c) => String(c.id) !== id);
+      await writeState(latest.reviews, comments);
+      commentsCache = comments;
+      renderComments();
+    } catch (err) {
+      alert("Couldn't remove that comment — check your connection and try again.");
+      removeBtn.disabled = false;
     }
   });
 
