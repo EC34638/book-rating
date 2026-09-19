@@ -874,7 +874,7 @@
         <dl class="details" id="detailsList"></dl>
       </div>
     </div>
-    <p class="anon-note">Your response is anonymous — no name is collected. Everyone in the club can see all responses below, but not who submitted them.</p>
+    <p class="anon-note">Your response is anonymous — no name is collected. While rating is open, only those who have submitted can see everyone's responses below; once rating closes, they become visible to everyone.</p>
 
     <div class="ornament" aria-hidden="true"><span>✦</span></div>
 
@@ -964,7 +964,7 @@
 
   <div class="list-card results-locked" id="resultsLockedNotice" style="display:none;">
     <p class="eyebrow">Results are hidden</p>
-    <p>Ratings and comments stay hidden while voting is open — for everyone, including readers who've already submitted. They open up to the whole club once the rating window closes on Sep 27, 11:59 PM (GMT+8).</p>
+    <p>Submit your review to see everyone's ratings and comments right away — or check back after Sep 27, 11:59 PM (GMT+8), when results open up to everyone.</p>
   </div>
 
   <div id="resultsWrap">
@@ -1062,13 +1062,15 @@
   function isBeforeOpen() { return Date.now() < RATING_OPEN_TIME; }
   function isSubmissionClosed() { return Date.now() > SUBMISSION_DEADLINE; }
 
-  // Results (everyone's ratings + comments) stay hidden from every visitor —
-  // regardless of whether they've voted — until the rating window itself
-  // closes (2026-09-27 23:59:59 GMT+8). Organizer always sees them, same
-  // bypass pattern as the other two gates.
+  // Results (everyone's ratings + comments) are hidden from a visitor until
+  // they've submitted their own review — except after the rating window
+  // closes (2026-09-27 23:59:59 GMT+8), when they open up to everyone
+  // regardless. Organizer always sees them, same bypass pattern as the
+  // other two gates.
   function canSeeResults() {
     if (document.body.classList.contains("organizer-mode")) return true;
-    return Date.now() > SUBMISSION_DEADLINE;
+    if (Date.now() > SUBMISSION_DEADLINE) return true;
+    return !!localStorage.getItem(SUBMITTED_KEY);
   }
 
   document.getElementById("headlineText").innerHTML = CONFIG.headline;
