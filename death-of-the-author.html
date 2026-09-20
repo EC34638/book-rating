@@ -964,7 +964,7 @@
 
   <div class="list-card results-locked" id="resultsLockedNotice" style="display:none;">
     <p class="eyebrow">Results are hidden</p>
-    <p>Submit your review to see everyone's ratings and comments right away — or check back after Sep 27, 11:59 PM (GMT+8), when results open up to everyone.</p>
+    <p>Submit your review to see everyone's ratings and comments right away — or check back after Sep 23, 11:59 PM (GMT+8), when results open up to everyone.</p>
   </div>
 
   <div id="resultsWrap">
@@ -1048,23 +1048,23 @@
     bookAuthor: "Nnedi Okorafor",
     periodText: "Aug 2 – Sep 20, 2026",
     openText: "Sep 20, 12:00 AM (GMT+8)",
-    deadlineText: "Sep 27, 11:59 PM (GMT+8)",
+    deadlineText: "Sep 23, 11:59 PM (GMT+8)",
     coverUrl: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1736814296i/214283593.jpg"
   };
 
-  // Rating opens 2026-09-20 00:00 GMT+8 and closes 2026-09-27 23:59:59 GMT+8.
+  // Rating opens 2026-09-20 00:00 GMT+8 and closes 2026-09-23 23:59:59 GMT+8.
   // Before the open time and after the deadline, new submissions are blocked
   // (read-only browsing of existing responses/comments is unaffected by
   // either edge once results are visible). The organizer bypasses both gates,
   // same as the one-vote lock, so they can still record entries any time.
   const RATING_OPEN_TIME = new Date("2026-09-20T00:00:00+08:00").getTime();
-  const SUBMISSION_DEADLINE = new Date("2026-09-27T23:59:59+08:00").getTime();
+  const SUBMISSION_DEADLINE = new Date("2026-09-23T23:59:59+08:00").getTime();
   function isBeforeOpen() { return Date.now() < RATING_OPEN_TIME; }
   function isSubmissionClosed() { return Date.now() > SUBMISSION_DEADLINE; }
 
   // Results (everyone's ratings + comments) are hidden from a visitor until
   // they've submitted their own review — except after the rating window
-  // closes (2026-09-27 23:59:59 GMT+8), when they open up to everyone
+  // closes (2026-09-23 23:59:59 GMT+8), when they open up to everyone
   // regardless. Organizer always sees them, same bypass pattern as the
   // other two gates.
   function canSeeResults() {
